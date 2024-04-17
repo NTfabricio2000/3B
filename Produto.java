@@ -33,7 +33,7 @@ public void setQuantidade(int q) {
 	this.Quantidade = q;
 }
 
-	public int multiplicar(double p, int q) {
+	public double multiplicar(double p, int q) {
 		return (Preco*Quantidade);
 	}
 }
