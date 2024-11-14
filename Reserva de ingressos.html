@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br"> 
+<head>
+    <link rel="stylesheet" href="CssDoSite.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Ingressos</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-image: url(https://img.freepik.com/fotos-premium/cubo-palomitas-maiz-rayas-accesorios-cine-sobre-fondo-rojo-brillante-crean-atmosfera-noche-cine_1062399-9775.jpg) ;
+    background-size: cover;
+
+
+}
+
+h2 {
+    text-align: center;
+    color:  #DCDCDC;
+    margin-bottom: 20px;
+}
+
+form {
+    width: 100%;
+    max-width: 400px;
+    background-color: #363636;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    opacity: 0.9;
+
+}
+
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color:  #DCDCDC;
+}
+
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #DCDCDC;
+    font-size: 1rem;
+}
+
+input[type="text"]:focus,-
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #4CAF50;
+    outline: none;
+    background-color: #f0f8f5;
+}
+
+button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.error {
+    color: #e74c3c;
+    font-size: 0.9em;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.success {
+    color: #2ecc71;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+    form {
+        padding: 20px;
+    }
+    
+    button {
+        font-size: 0.9rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        font-size: 0.9rem;
+    }
+}
+    </style>
+</head>
+<body>
+
+
+<form id="reservaForm">
+    <h2>Reserva de Ingressos</h2>
+    <label for="nome">Nome Completo:</label>
+    <input type="text" id="nome" name="nome" required>
+    <div class="error" id="errorNome">O campo Nome Completo é obrigatório.</div>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <div class="error" id="errorEmail">Formato de email inválido.</div>
+
+    <label for="filme">Selecione o Filme:</label>
+    <select id="filme" name="filme" required>
+        <option value="">Selecione um filme</option>
+        <option value="Vingadores">Vingadores</option>
+        <option value="O Rei Leão">O Rei Leão</option>
+        <option value="Barbie">Barbie</option>
+    </select>
+
+    <label for="ingressos">Número de Ingressos:</label>
+    <input type="number" id="ingressos" name="ingressos" min="1" max="10" required>
+    <div class="error" id="errorIngressos">Escolha entre 1 e 10 ingressos.</div>
+
+    <label for="cartao">Número do Cartão de Crédito:</label>
+    <input type="text" id="cartao" name="cartao" pattern="\d{4} \d{4} \d{4} \d{4}" placeholder="XXXX XXXX XXXX XXXX" required>
+    <div class="error" id="errorCartao">Formato do cartão inválido. Deve ser no formato XXXX XXXX XXXX XXXX.</div>
+
+    <label for="data">Data do Filme:</label>
+    <input type="date" id="data" name="data" required>
+    <div class="error" id="errorData">Data inválida. Escolha uma data futura.</div>
+
+    <label>
+        <input type="checkbox" id="termos" required> Aceito os Termos e Condições
+    </label>
+
+    <button type="button" onclick="reservarIngresso()">Reservar Ingresso</button>
+    <div class="success" id="successMsg"></div>
+</form>
+
+<script>
+    function verificarEmail(email) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const emailsCadastrados = ['reservas@dominio.com', 'cliente@dominio.com'];
+                if (emailsCadastrados.includes(email)) {
+                    reject('Email já cadastrado para outra reserva');
+                } else {
+                    resolve('Email válido');
+                }
+            }, 1500);
+        });
+    }
+
+    function reservarIngresso() {
+        document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
+        document.getElementById('successMsg').innerText = '';
+
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const ingressos = parseInt(document.getElementById('ingressos').value, 10);
+        const cartao = document.getElementById('cartao').value;
+        const data = new Date(document.getElementById('data').value);
+        const termos = document.getElementById('termos').checked;
+
+        let isValid = true;
+        if (nome.trim() === '') { document.getElementById('errorNome').style.display = 'block'; isValid = false; }
+        if (!/\S+@\S+\.\S+/.test(email)) { document.getElementById('errorEmail').style.display = 'block'; isValid = false; }
+        if (isNaN(ingressos) || ingressos < 1 || ingressos > 10) { document.getElementById('errorIngressos').style.display = 'block'; isValid = false; }
+        if (!/^\d{4} \d{4} \d{4} \d{4}$/.test(cartao)) { document.getElementById('errorCartao').style.display = 'block'; isValid = false; }
+        if (data <= new Date()) { document.getElementById('errorData').style.display = 'block'; isValid = false; }
+        if (!termos) { alert('Você deve aceitar os termos e condições'); isValid = false; }
+
+        if (!isValid) return;
+
+        verificarEmail(email)
+            .then(() => {
+                localStorage.setItem('reserva', JSON.stringify({ nome, email, filme: document.getElementById('filme').value, ingressos }));
+                document.getElementById('successMsg').innerText = 'Reserva realizada com sucesso!';
+                document.getElementById('reservaForm').reset();
+            })
+            .catch(error => {
+                document.getElementById('errorEmail').innerText = error;
+                document.getElementById('errorEmail').style.display = 'block';
+            });
+    }
+</script>
+
+</body>
+</html>
